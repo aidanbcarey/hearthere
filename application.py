@@ -55,7 +55,7 @@ Session(app)
 dbs=os.environ['DATABASE_URL']
 db = SQL(dbs)
 # Configure CS50 Library to use SQLite database
-db=psycopg2.connect(dbs, sslmode='require')
+#db=psycopg2.connect(dbs, sslmode='require')
 
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
