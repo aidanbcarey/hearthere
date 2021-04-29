@@ -5,3 +5,5 @@ requests
 spotipy
 requests
 helpers
+gunicorn
+psycopg2
