@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Find price!
+{% endblock %}
+
+{% block main %}
+<div class="centered">
+<table>
+<h>Portfolio:</h>
+
+    <table align="center" style="margin: 0px auto;">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Name</th>
+                            <th>Shares</th>
+                            <th>Price</th>
+                            <th>Total</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in portfolio %}
+                            <tr>
+                                <td>{{ item.symbol }}</td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.nowned }}</td>
+                                <td>{{ item.price | usd }}</td>
+                                <td>{{ item.value | usd }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+    </table>
+</div>
+{% endblock %}
