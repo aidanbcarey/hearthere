@@ -23,7 +23,7 @@ SHOW_DIALOG = True
 CLI_SEC="56203ed941434ffc8f9444fbb8d3ea0e"
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "https://ide-574cb91c3a5e44f0bbe463a5e94e27be-8080.cs50.ws/callback"
+REDIRECT_URI = "https://hearthere.herokuapp.com/api_callback"
 
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read'
 
@@ -179,7 +179,7 @@ def quote():
     if request.method == "POST":
 
         auth_url = f'{API_BASE}/authorize?client_id={CLI_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPE}&show_dialog={SHOW_DIALOG}'
-        print(auth_url)
+    
         return redirect(auth_url)
 
 
