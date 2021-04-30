@@ -22,15 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in portfolio %}
-                            <tr>
-                                <td>{{ item.symbol }}</td>
-                                <td>{{ item.name }}</td>
-                                <td>{{ item.nowned }}</td>
-                                <td>{{ item.price | usd }}</td>
-                                <td>{{ item.value | usd }}</td>
-                            </tr>
-                        {% endfor %}
+                        {{ portfolio }}
                     </tbody>
                 </table>
 

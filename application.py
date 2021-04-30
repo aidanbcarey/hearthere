@@ -67,7 +67,7 @@ if not os.environ.get("API_KEY"):
 @app.route("/")
 @login_required
 def index():
-    user = session.get("user_id")
+    user = session.get("user_id",portfolio=session["toke"])
     
 
     return(render_template("index.html"))
@@ -259,7 +259,7 @@ def callback():
         })
 
     res_body = res.json()
-    print(res.json())
+ 
     session["toke"] = res_body.get("access_token")
 
     return redirect("/")
