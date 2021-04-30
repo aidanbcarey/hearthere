@@ -23,7 +23,7 @@ SHOW_DIALOG = True
 CLI_SEC="56203ed941434ffc8f9444fbb8d3ea0e"
 
 # Make sure you add this to Redirect URIs in the setting of the application dashboard
-REDIRECT_URI = "https://hearthere.herokuapp.com/api_callback"
+REDIRECT_URI = "https://hearthere.herokuapp.com/callback"
 
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read'
 
