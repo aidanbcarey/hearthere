@@ -253,7 +253,7 @@ def callback():
     res = requests.post(auth_token_url, data={
         "grant_type":"authorization_code",
         "code":code,
-        "redirect_uri":"https://ide-574cb91c3a5e44f0bbe463a5e94e27be-8080.cs50.ws/callback",
+        "redirect_uri":REDIRECT_URI,
         "client_id":CLI_ID,
         "client_secret":CLI_SEC
         })
