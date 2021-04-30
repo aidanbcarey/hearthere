@@ -67,10 +67,10 @@ if not os.environ.get("API_KEY"):
 @app.route("/")
 @login_required
 def index():
-    user = session.get("user_id",portfolio=session["toke"])
+    user = session.get("user_id")
     
 
-    return(render_template("index.html"))
+    return(render_template("index.html",,portfolio=session["toke"]))
 
 
 @app.route("/buy", methods=["GET", "POST"])
