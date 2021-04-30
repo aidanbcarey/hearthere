@@ -68,40 +68,9 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     user = session.get("user_id")
-    stockhist = db.execute("SELECT symbol,quantity,buysell FROM transactions WHERE id=?", user)
-    transacted = {}
-    portfolio = []
+    
 
-    for i in stockhist:
-        # Go through transactions, see how many shares we have available
-        if i["symbol"] not in transacted:
-            if i["buysell"] == "buy":
-                transacted[i["symbol"]] = i["quantity"]
-            else:
-                transacted[i["symbol"]] = -i["quantity"]
-        else:
-            if i["buysell"] == "buy":
-                transacted[i["symbol"]] += i["quantity"]
-            else:
-                transacted[i["symbol"]] -= i["quantity"]
-    total = 0
-    for i in transacted:
-        entry = {}
-        # If we haven't sold all of our stock, then there will be some left
-        if transacted[i] > 0:
-            entry["symbol"] = i.upper()
-            entry["nowned"] = transacted[i]
-            entry["name"] = lookup(i)['name']
-            entry["price"] = lookup(i)['price']
-            entry["value"] = lookup(i)['price']*transacted[i]
-            total += lookup(i)['price']*transacted[i]
-            portfolio.append(entry)
-    # can't forget the cash!
-    cash = db.execute("SELECT cash FROM users WHERE id=?", user)[0]['cash']
-    portfolio.append({"name": "CASH", "value": cash})
-    portfolio.append({"name": "TOTAL", "value": total + cash})
-
-    return(render_template("index.html", portfolio=portfolio))
+    return(render_template("index.html"))
 
 
 @app.route("/buy", methods=["GET", "POST"])
