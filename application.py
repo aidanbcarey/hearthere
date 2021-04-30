@@ -70,7 +70,7 @@ def index():
     user = session.get("user_id")
     
 
-    return(render_template("index.html",,portfolio=session["toke"]))
+    return(render_template("index.html",portfolio=session["toke"]))
 
 
 @app.route("/buy", methods=["GET", "POST"])
