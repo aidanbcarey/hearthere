@@ -12,7 +12,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import requests
 import psycopg2
-
+import psycopg2.extras
 
 # Configure application
 app = Flask(__name__)
