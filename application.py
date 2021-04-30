@@ -276,7 +276,6 @@ def sell():
     return apology("TODO")
 @app.route("/callback")
 def callback():
-    session.clear()
     code = request.args.get('code')
 
     auth_token_url = f"{API_BASE}/api/token"
