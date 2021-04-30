@@ -55,7 +55,7 @@ Session(app)
 #dbs=os.environ['dbu']
 #db = SQL(dbs)
 datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
-db=datab.cursor()
+db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
 # Configure CS50 Library to use SQLite database
 #db=psycopg2.connect(dbs, sslmode='require')
 
