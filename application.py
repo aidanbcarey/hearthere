@@ -52,8 +52,9 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-dbs=os.environ['dbu']
-db = SQL(dbs)
+#dbs=os.environ['dbu']
+#db = SQL(dbs)
+db=psycopg2.connect(DATABASE_URL, sslmode='require')
 # Configure CS50 Library to use SQLite database
 #db=psycopg2.connect(dbs, sslmode='require')
 
