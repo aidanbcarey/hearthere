@@ -160,11 +160,11 @@ def logout():
     return redirect("/")
 
 
-@app.route("/quote", methods=["GET", "POST"])
+@app.route("/connect", methods=["GET", "POST"])
 @login_required
-def quote():
+def connect():
     if request.method == "GET":
-        return(render_template("quote.html"))
+        return(render_template("connect.html"))
     if request.method == "POST":
 
         auth_url = f'{API_BASE}/authorize?client_id={CLI_ID}&response_type=code&redirect_uri={REDIRECT_URI}&scope={SCOPE}&show_dialog={SHOW_DIALOG}'
