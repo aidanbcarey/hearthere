@@ -13,7 +13,8 @@ from spotipy.oauth2 import SpotifyOAuth
 import requests
 import psycopg2
 import psycopg2.extras
-
+import pandas as pd
+import lyricsgenius 
 # Configure application
 app = Flask(__name__)
 app.secret_key = "56203ed941434ffc8f9444fbb8d3ea0e"
@@ -26,7 +27,7 @@ CLI_SEC="56203ed941434ffc8f9444fbb8d3ea0e"
 REDIRECT_URI = "https://hearthere.herokuapp.com/callback"
 
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read'
-
+genius=lyricsgenius.Genius("gFaD-lKo5gGKfo0W5pz-LYopBmkcLdurWAdaIcukMmB-fCh0ewfD6binGo6dXVe9")
 
 
 
@@ -80,11 +81,21 @@ def buy():
         print("here")
         sp = spotipy.Spotify(auth=session['toke'])
         response = sp.current_user_top_tracks(limit="1")
-
-        return render_template("quoted.html",track=response['items'][0]['name'])
+        name=response['items'][0]['name']
+        artist=response['items']['artists'][0]['name']
+        lyrics=getlyrics(name,artist)
+        return render_template("quoted.html",track=)
     else:
         return apology("sowwy")
 
+def getlyrics(song,artist):
+    if " - " in song:
+        searchname = song.split(" - ", 1)[0] 
+    else:
+        searchname=song
+    searchname=searchname.replace('(','').replace(')','')
+    song = genius.search_song(searchname, artist);       
+    return(song.lyrics)
 
 
 @app.route("/history")
