@@ -89,7 +89,7 @@ def buy():
         for i in lyrics:
             if i:
                 if i[0]=="[" and i[-1]=="]":
-                lyrics.remove(i)
+                    lyrics.remove(i)
 
         return render_template("quoted.html",lyrics=lyrics)
     else:
