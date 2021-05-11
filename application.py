@@ -84,7 +84,7 @@ def buy():
         name=response['items'][0]['name']
         artist=response['items']['artists'][0]['name']
         lyrics=getlyrics(name,artist)
-        return render_template("quoted.html",track=)
+        return render_template("quoted.html",track=lyrics)
     else:
         return apology("sowwy")
 
