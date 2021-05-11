@@ -82,7 +82,7 @@ def buy():
         sp = spotipy.Spotify(auth=session['toke'])
         response = sp.current_user_top_tracks(limit="1")
         name=response['items'][0]['name']
-        artist=response['items']['artists'][0]['name']
+        artist=response['items'][0]['artists'][0]['name']
         lyrics=getlyrics(name,artist)
         return render_template("quoted.html",track=lyrics)
     else:
