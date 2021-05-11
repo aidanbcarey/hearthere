@@ -7,3 +7,6 @@ requests
 helpers
 gunicorn
 psycopg2
+pandas
+lyricsgenius
+
