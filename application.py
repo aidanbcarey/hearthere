@@ -86,6 +86,11 @@ def buy():
         lyrics=getlyrics(name,artist)
         lyrics=getlyrics(name,artist)
         lyrics=lyrics.split("\n")
+        for i in lyrics:
+            if i:
+                if i[0]=="[" and i[-1]=="]":
+                lyrics.remove(i)
+
         return render_template("quoted.html",lyrics=lyrics)
     else:
         return apology("sowwy")
