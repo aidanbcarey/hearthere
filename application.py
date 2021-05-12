@@ -126,6 +126,7 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
+    ratiot={}
     sp = spotipy.Spotify(auth=session['toke'])
     response = sp.current_user_top_tracks(limit="10")
     job=q.enqueue(get_freq,response)
