@@ -5,11 +5,11 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/connect" method="post">
+    <form action="/scrape" method="post">
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="symbol" type="text">
+            <input autocomplete="off" autofocus class="form-control" name="songno" placeholder="How many songs?" type="number">
         </div>
 
-        <button class="btn btn-primary" type="submit">Get price</button>
+        <button class="btn btn-primary" type="submit">Submit request!</button>
     </form>
 {% endblock %}

@@ -129,17 +129,21 @@ def buy():
 
 
 
-@app.route("/history")
+@app.route("/scrape")
 @login_required
-def history():
-   
-    user = session.get("user_id")
-    sp = spotipy.Spotify(auth=session['toke'])
-    response = sp.current_user_top_tracks(limit="15")
-    job=q.enqueue(get_freq,args=(response,genius,worddata,user))
-    
-    return apology("Refresh in a minute or two!")
+def scrape():
+    if request.method=="GET":
+        return render_template("connect.html")
+    if request.method=="PUT":
+        lim=request.form.get("songno")
+        user = session.get("user_id")
+        sp = spotipy.Spotify(auth=session['toke'])
+        response = sp.current_user_top_tracks(limit=lim)
+        job=q.enqueue(get_freq,args=(response,genius,worddata,user))
+        return apology("Refresh in a minute or two!")
 
+    
+    
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
