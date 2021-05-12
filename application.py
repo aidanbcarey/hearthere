@@ -235,7 +235,7 @@ def viewdatal():
     if rows:
         rows=rows[:10]
         for i in rows:
-            ratiot.append((i["word"],i["freq"]))
+            ratiot.append((i["word"],round(i["freq"])))
         return render_template("freqs.html",freqs=ratiot,whatare="Underrepresented words")
     else:
         render_template("warning.html",warning="Scrape some data from Spotify first!")
@@ -254,7 +254,7 @@ def viewdatam():
     if rows:
         rows=rows[-10:]
         for i in rows:
-            ratiot.append((i["word"],i["freq"]))
+            ratiot.append((i["word"],round(i["freq"],3)))
         return render_template("freqs.html",freqs=ratiot,whatare="Overrepresented words")
     else:
         render_template("warning.html",warning="Scrape some data from Spotify first!")
