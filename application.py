@@ -79,8 +79,13 @@ if not os.environ.get("API_KEY"):
 @app.route("/")
 @login_required
 def index():
+    
     user = session.get("user_id")
-    return(render_template("index.html"))
+    try:
+        session['toke']
+        return(render_template("loggedin.html"))
+    except:
+        return(render_template("index.html"))
 
 
 
