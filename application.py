@@ -93,8 +93,8 @@ def scrape():
         try:
             # Get stuff from the webpage
             lim=int(request.form.get("songno"))
-            if lim>25:
-                return render_template("warning.html",warning="Max 25!")
+            if lim>50:
+                return render_template("warning.html",warning="Max 50!")
             timespan = request.form.get("timespan")
             user = session.get("user_id")
             # Connect to Spotify and get our access token
