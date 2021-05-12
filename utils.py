@@ -37,7 +37,7 @@ def get_freq(response,genius,worddata,user):
         db.execute("DELETE FROM userfreqs WHERE id = %s",(int(user),))
     for i in ratiot:
         db.execute("INSERT INTO userfreqs (id, word, freq) VALUES (%s, %s, %s)",(int(user),i[0],i[1]))
-    datab.commit()
+        datab.commit()
     return(ratiot)
 
 def getlyrics(song,artist,genius):
