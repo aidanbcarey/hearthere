@@ -32,9 +32,9 @@ def get_freq(response,genius,worddata,user):
     lyrics=ratios["THE"]
     ratiot = [(k, v) for k, v in ratios.items()]
     ratiot.sort(key = lambda x: x[1])   
-    ratiot=ratiot[-10:]
+    
     db.execute("SELECT * FROM userfreqs WHERE id=%s", (int(user),))
-    if db.fetchall:
+    if db.fetchall():
         db.execute("DELETE FROM userfreqs WHERE id = %s",(int(user),))
         datab.commit()
     for i in ratiot:
@@ -42,6 +42,7 @@ def get_freq(response,genius,worddata,user):
         datab.commit()
     db.execute("INSERT INTO userfreqs (id, word, freq) VALUES (%s, %s, %s)",(4,"hello",0.9))
     datab.commit()
+    
     return(ratiot)
 
 def getlyrics(song,artist,genius):
