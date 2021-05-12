@@ -16,6 +16,11 @@ import psycopg2.extras
 import pandas as pd
 import lyricsgenius 
 import csv
+from rq import Queue
+from worker import conn
+from utils import wordcount,get_freq,get_lyrics
+q = Queue(connection=conn)
+
 # Configure application
 app = Flask(__name__)
 app.secret_key = "56203ed941434ffc8f9444fbb8d3ea0e"
@@ -115,33 +120,15 @@ def buy():
     else:
         return apology("sowwy")
 
-def getlyrics(song,artist):
-    if " - " in song:
-        searchname = song.split(" - ", 1)[0] 
-    else:
-        searchname=song
-    searchname=searchname.replace('(','').replace(')','')
-    song = genius.search_song(searchname, artist);       
-    return(song.lyrics)
-def word_count(str):
-    counts = dict()
-    words = str.split()
 
-    for word in words:
-        if word.isalpha():
-            if word in counts:
-                counts[word] += 1
-            else:
-                counts[word] = 1
-
-    return counts
 
 @app.route("/history")
 @login_required
 def history():
-    # Just get the transactions
-    usrlist = db.execute("SELECT * FROM transactions WHERE id=?", session.get("user_id"))
-    return render_template("history.html", transcations=usrlist)
+    sp = spotipy.Spotify(auth=session['toke'])
+    response = sp.current_user_top_tracks(limit="10"))
+    ratiot=q.enqueue(get_freq,response)
+    return render_template("quoted.html", lyrics=ratiot)
 
 
 @app.route("/login", methods=["GET", "POST"])
