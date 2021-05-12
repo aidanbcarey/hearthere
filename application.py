@@ -148,7 +148,7 @@ def scrape():
                 songlist.append((name,artist))
             return render_template("songlist.html",songlist=songlist)
         except:
-            render_template("warning.html",warning="You need to log in to Spotify!")
+            return render_template("warning.html",warning="You need to log in to Spotify!")
     
     
 
