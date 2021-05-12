@@ -140,7 +140,12 @@ def scrape():
         sp = spotipy.Spotify(auth=session['toke'])
         response = sp.current_user_top_tracks(limit=lim)
         job=q.enqueue(get_freq,args=(response,genius,worddata,user))
-        return apology("Refresh in a minute or two!")
+        songlist=[]
+        for item in response['items']:
+            name=item['name']
+            artist=item['artists'][0]['name']
+            songlist.append((name,artist))
+        return render_template("songlist.html",songlist=songlist)
 
     
     
