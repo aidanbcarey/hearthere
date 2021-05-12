@@ -5,7 +5,8 @@ def get_freq(response,genius,worddata):
         name=item['name']
         artist=item['artists'][0]['name']
         lyrics=getlyrics(name,artist,genius)
-
+        if not lyrics:
+            continue
         lyrics=lyrics.split("\n")
         for i in lyrics:
             if i:
