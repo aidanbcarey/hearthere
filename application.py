@@ -96,6 +96,9 @@ def scrape():
     if request.method=="POST":
         try:
             lim=request.form.get("songno")
+            if lim>25:
+                return render_template("warning.html",warning="Max 25!")
+
             user = session.get("user_id")
             sp = spotipy.Spotify(auth=session['toke'])
             response = sp.current_user_top_tracks(limit=lim)
