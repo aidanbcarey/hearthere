@@ -1,17 +1,17 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Top songs
+Your data!
 {% endblock %}
 
 {% block main %}
-The songs we're looking at!
+{ whatare }
 <table class="table">
     <tr>
-        <th> Song </th>
-        <th> Artist </th>
+        <th> Most underused words </th>
+        <th> Ratio rel. to corpus </th>
    </tr>
-    {% for tuple in songlist%}
+    {% for tuple in freqs%}
    <tr>
         <th> {{ tuple[0] }} </th>
         <th> {{ tuple[1] }} </th>

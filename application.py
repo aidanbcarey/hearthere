@@ -236,7 +236,7 @@ def viewdatal():
         rows=rows[10:]
         for i in rows:
             ratiot.append((i["word"],i["freq"]))
-        return render_template("songlist.html",lyrics=ratiot,listkind="Most overused words!")
+        return render_template("freqs.html",freqs=ratiot,whatare="Underrepresented words")
     else:
         render_template("warning.html",warning="Scrape some data from Spotify first!")
 
@@ -255,9 +255,9 @@ def viewdatam():
         for i in rows:
             rows=rows[-10:]
             ratiot.append((i["word"],i["freq"]))
-        return render_template("songlist.html",songlist=ratiot)
+        return render_template("freqs.html",freqs=ratiot,whatare="Overrepresented words")
     else:
-        render_template("warning.html",warning="Scrape some data from Spotify first!",listkind="Most underused words!")
+        render_template("warning.html",warning="Scrape some data from Spotify first!")
 
 
 def errorhandler(e):
