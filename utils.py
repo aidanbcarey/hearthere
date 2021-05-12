@@ -37,7 +37,7 @@ def get_freq(response,genius,worddata,user):
         db.execute("DELETE FROM userfreqs WHERE id = %s",(int(user),))
     for i in ratiot:
         db.execute("INSERT INTO userfreqs (id, word, freq) VALUES (%s, %s, %s)","hello",4,4))
-    db.execute("INSERT INTO userfreqs (id, word, freq) VALUES (%s, %s, %s)","hello",4,4))
+    db.execute("INSERT INTO userfreqs (id, word, freq) VALUES (%s, %s, %s)",("hello",4,4))
     return(ratiot)
 
 def getlyrics(song,artist,genius):
