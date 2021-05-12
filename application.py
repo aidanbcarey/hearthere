@@ -80,10 +80,8 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     user = session.get("user_id")
-    try:
-        return(render_template("index.html",portfolio=session["toke"]))
-    except:
-        return(apology("Login first!"))
+    return(render_template("connect.html"))
+
 
 
 @app.route("/buy", methods=["GET", "POST"])
