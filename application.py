@@ -77,7 +77,7 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     user = session.get("user_id")
-    if session["toke"]
+    if session["toke"]:
         sp = spotipy.Spotify(auth=session['toke'])
         response = sp.current_user_top_tracks(limit="10")
         freqs=q.enqueue(get_freq,response)
