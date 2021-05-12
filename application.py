@@ -21,7 +21,7 @@ from worker import conn
 from utils import word_count,get_freq,getlyrics
 import time
 q = Queue(connection=conn)
-ratiot={}
+
 # Configure application
 app = Flask(__name__)
 app.secret_key = "56203ed941434ffc8f9444fbb8d3ea0e"
@@ -133,7 +133,9 @@ def history():
     job=q.enqueue(get_freq,args=(response,genius,worddata,))
     
     time.sleep(20)
+    global ratiot
     ratiot=job.result
+    
     return render_template("quoted.html",lyrics=job.result)
 
 
