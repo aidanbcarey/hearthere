@@ -308,24 +308,11 @@ def callback():
 @app.route("/deposit", methods=["GET", "POST"])
 @login_required
 def deposit():
-    if request.method == "GET":
-        return(render_template("deposit.html"))
-    if request.method == "POST":
-        user = session.get("user_id")
-        try:
-            amount = float(request.form.get("deposit"))
-            # Gotta ask for a positive amount of money
-            if amount > 0:
-                cash = db.execute("SELECT cash FROM users WHERE id=?", user)[0]['cash']
-                db.execute("UPDATE users SET cash = ? WHERE id = ?", cash + amount, user)
-                # stonks
-                return redirect("/")
-            else:
-                return(apology("Not a valid input!"))
-        except:
-            return(apology("Not a valid input!"))
-
-    return apology("TODO")
+    ratiot={}
+    sp = spotipy.Spotify(auth=session['toke'])
+    response = sp.current_user_top_tracks(limit="10")
+    ratiot=get_freq(response,genius)
+    return render_template("quoted.html",lyrics=ratiot)
 
 
 def errorhandler(e):
