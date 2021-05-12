@@ -132,9 +132,6 @@ def history():
     response = sp.current_user_top_tracks(limit="10")
     job=q.enqueue(get_freq,args=(response,genius,worddata,))
     
-    time.sleep(20)
-    global ratiot
-    ratiot=job.result
     
     return render_template("quoted.html",lyrics=job.result)
 
