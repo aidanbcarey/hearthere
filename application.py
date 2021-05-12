@@ -230,27 +230,6 @@ def callback():
 
     return redirect("/")
 
-@app.route("/viewdatal", methods=["GET", "POST"])
-@login_required
-def viewdatal():
-    user=session.get("user_id")
-    datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
-    db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    # Ratio tuples - word/fequency pairs
-    ratiot=[]
-    int(session.get("user_id"))
-    db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
-    rows = db.fetchall()
-    datab.commit()
-    
-    if rows:
-        # Rows are presorted so let's see what the first 10 elements are
-        rows=rows[:10]
-        for i in rows:
-            ratiot.append((i["word"],round(i["freq"],3)))
-        return render_template("freqs.html",freqs=ratiot,whatare="Underrepresented words")
-    else:
-        render_template("warning.html",warning="Scrape some data from Spotify first!")
 
 @app.route("/viewdata", methods=["GET", "POST"])
 @login_required
@@ -271,7 +250,7 @@ def viewdata():
         datab.commit()
         if rows:
             # Rows are presorted so let's see what the last 10 elements are (overrepresented ones)
-            if moreorless="more":
+            if moreorless=="more":
                 rows=rows[-1*wordno:]
             else:
                 rows=rows[:wordno]
