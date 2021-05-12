@@ -233,7 +233,7 @@ def viewdatal():
     datab.commit()
     
     if rows:
-        rows=rows[10:]
+        rows=rows[:10]
         for i in rows:
             ratiot.append((i["word"],i["freq"]))
         return render_template("freqs.html",freqs=ratiot,whatare="Underrepresented words")
