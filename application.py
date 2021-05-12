@@ -129,7 +129,7 @@ def buy():
 
 
 
-@app.route("/scrape")
+@app.route("/scrape",methods=["GET", "POST"])
 @login_required
 def scrape():
     if request.method=="GET":
