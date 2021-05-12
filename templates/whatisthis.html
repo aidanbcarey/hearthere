@@ -11,9 +11,11 @@ Huh?
 <p>Welcome! On this website you will see four pages (with the exception of this one).</p>
 <p> The first is the on login page, which urges you to connect your Spotify account.</p>
 <p> Next, we have the querying page. This tells the workers to fetch the lyrics of your top n songs on Spotify (n specified by you - so interactive!). It usually takes a bit of time to get 
-    all the lyrics from Genius, so just wait around. When your data is ready, it will be available for viewing in the respective page. f you make a query after already having
-    made a different quesry, then once your second query is done it will replace the current data on the viewing pages. 
+    all the lyrics from Genius, so just wait around. When your data is ready, it will be available for viewing in the respective page. If you make a query after already having
+    made a different query, then once your next query is done it will replace the current data on the viewing pages. 
 </p>
-<p> Finally, the data pages! These compare the frequencies of words in the songs you listen to to those found in a reference dataset (all Billboard top songs of the 2010s).</p>
+<p> Finally, the data pages! These compare the frequencies of words in the songs you listen to to those found in a reference dataset (all Billboard top songs of the 2010s). Overused words are found more often in your music than in the reference dataset,
+    and underused songs are used less. The number found in each table is the ratio of the respective frequencies in your music vs. Billboard songs.
+</p>
 </div>
 {% endblock %}
