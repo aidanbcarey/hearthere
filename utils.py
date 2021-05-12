@@ -33,7 +33,7 @@ def get_freq(response,genius,worddata,user):
     ratiot = [(k, v) for k, v in ratios.items()]
     ratiot.sort(key = lambda x: x[1])   
     ratiot=ratiot[1:10]
-    db.execute("SELECT * FROM userfreqs WHERE id=%s", (int(user),)):
+    db.execute("SELECT * FROM userfreqs WHERE id=%s", (int(user),))
     if db.fetchall:
         db.execute("DELETE FROM userfreqs WHERE id = %s",(int(user),))
         datab.commit()
