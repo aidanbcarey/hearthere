@@ -252,8 +252,8 @@ def viewdatam():
     rows = db.fetchall()
     datab.commit()
     if rows:
+        rows=rows[-10:]
         for i in rows:
-            rows=rows[-10:]
             ratiot.append((i["word"],i["freq"]))
         return render_template("freqs.html",freqs=ratiot,whatare="Overrepresented words")
     else:

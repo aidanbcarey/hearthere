@@ -5,10 +5,10 @@ Your data!
 {% endblock %}
 
 {% block main %}
-{ whatare }
+{{ whatare }}
 <table class="table">
     <tr>
-        <th> Most underused words </th>
+        <th> Word </th>
         <th> Ratio rel. to corpus </th>
    </tr>
     {% for tuple in freqs%}
