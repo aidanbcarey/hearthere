@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Make a query!
+{% endblock %}
+
+{% block main %}
+    <form action="/viewdata" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="wordno" placeholder="How many words?" type="number">
+        </div>
+        <select name="moreorless">
+            <option disabled selected value="">More frequent or less frequest?</option>
+            
+            <option value="more">more</option>
+            <option value="less">less</option>
+            
+            
+        </select>
+
+
+        <button class="btn btn-primary" type="submit">Submit request!</button>
+    </form>
+{% endblock %}

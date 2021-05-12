@@ -252,26 +252,34 @@ def viewdatal():
     else:
         render_template("warning.html",warning="Scrape some data from Spotify first!")
 
-@app.route("/viewdatam", methods=["GET", "POST"])
+@app.route("/viewdata", methods=["GET", "POST"])
 @login_required
-def viewdatam():
-    user=session.get("user_id")
-    datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
-    db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    ratiot=[]
-    int(session.get("user_id"))
-    db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
-    rows = db.fetchall()
-    # Better safe than sorry. The sheer number of SQL errors I got...
-    datab.commit()
-    if rows:
-        # Rows are presorted so let's see what the last 10 elements are (overrepresented ones)
-        rows=rows[-10:]
-        for i in rows:
-            ratiot.append((i["word"],round(i["freq"],3)))
-        return render_template("freqs.html",freqs=ratiot,whatare="Overrepresented words")
-    else:
-        render_template("warning.html",warning="Scrape some data from Spotify first!")
+def viewdata():
+    if request.method="GET":
+        render_template("selectdata.html")
+    if request.method == "POST":
+        wordno=request.form.get("wordno")
+        ml=request.form.get("moreorless")
+        user=session.get("user_id")
+        datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
+        db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        ratiot=[]
+        int(session.get("user_id"))
+        db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
+        rows = db.fetchall()
+        # Better safe than sorry. The sheer number of SQL errors I got...
+        datab.commit()
+        if rows:
+            # Rows are presorted so let's see what the last 10 elements are (overrepresented ones)
+            if moreorless="more":
+                rows=rows[-1*wordno:]
+            else:
+                rows=rows[:wordno]
+            for i in rows:
+                ratiot.append((i["word"],round(i["freq"],3)))
+            return render_template("freqs.html",freqs=ratiot,whatare="Overrepresented words")
+        else:
+            render_template("warning.html",warning="Scrape some data from Spotify first!")
 
 
 def errorhandler(e):
