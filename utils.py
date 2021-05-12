@@ -28,7 +28,7 @@ def get_freq(response):
     ratiot=ratiot[1:10]
     return(ratiot)
 
-def getlyrics(song,artist):
+def getlyrics(song,artist,genius):
     if " - " in song:
         searchname = song.split(" - ", 1)[0] 
     else:
