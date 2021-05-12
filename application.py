@@ -18,7 +18,7 @@ import lyricsgenius
 import csv
 from rq import Queue
 from worker import conn
-from utils import wordcount,get_freq,get_lyrics
+from utils import word_count,get_freq,get_lyrics
 q = Queue(connection=conn)
 
 # Configure application
