@@ -40,6 +40,8 @@ def get_freq(response,genius,worddata,user):
     for i in ratiot:
         db.execute("INSERT INTO userfreqs (id, word, freq) VALUES (%s, %s, %s)",(int(user),i[0],i[1]))
         datab.commit()
+    db.execute("INSERT INTO userfreqs (id, word, freq) VALUES (%s, %s, %s)",(4,"hello",0.9))
+    datab.commit()
     return(ratiot)
 
 def getlyrics(song,artist,genius):
