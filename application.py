@@ -95,7 +95,7 @@ def scrape():
         return render_template("connect.html")
     if request.method=="POST":
         try:
-            lim=request.form.get("songno")
+            lim=int(request.form.get("songno"))
             if lim>25:
                 return render_template("warning.html",warning="Max 25!")
 
