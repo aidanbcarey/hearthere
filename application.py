@@ -66,7 +66,7 @@ Session(app)
 #db = SQL(dbs)
 datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
 db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
-db2=datab.cursor()
+
 
 # Configure CS50 Library to use SQLite database
 #db=psycopg2.connect(dbs, sslmode='require')
@@ -129,6 +129,7 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
+    db2=datab.cursor()
     user = session.get("user_id")
     sp = spotipy.Spotify(auth=session['toke'])
     response = sp.current_user_top_tracks(limit="30")
