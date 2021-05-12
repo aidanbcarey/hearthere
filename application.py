@@ -129,11 +129,11 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
-    db2=datab.cursor()
+   
     user = session.get("user_id")
     sp = spotipy.Spotify(auth=session['toke'])
     response = sp.current_user_top_tracks(limit="30")
-    job=q.enqueue(get_freq,args=(response,genius,worddata,db2,user))
+    job=q.enqueue(get_freq,args=(response,genius,worddata,datab,user))
     while not job.result:
         pass
     

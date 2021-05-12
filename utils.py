@@ -1,4 +1,5 @@
-def get_freq(response,genius,worddata,db,user):
+def get_freq(response,genius,worddata,datab,user):
+    db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
     wordbundle=[]
     ratios={}
     for item in response['items']:
