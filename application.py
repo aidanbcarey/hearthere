@@ -24,23 +24,25 @@ q = Queue(connection=conn)
 
 # Configure application
 app = Flask(__name__)
+# Configure variables we will be using throughout
 app.secret_key = "56203ed941434ffc8f9444fbb8d3ea0e"
 CLI_ID="92c6a3d2dd7d4efb89ad40c7a33f6e87"
 API_BASE = 'https://accounts.spotify.com'
 SHOW_DIALOG = True
 CLI_SEC="56203ed941434ffc8f9444fbb8d3ea0e"
 
-# Make sure you add this to Redirect URIs in the setting of the application dashboard
+# Redirect URI for the Spotify API
 REDIRECT_URI = "https://hearthere.herokuapp.com/callback"
 
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read'
+# Configure Genius API
 genius=lyricsgenius.Genius("gFaD-lKo5gGKfo0W5pz-LYopBmkcLdurWAdaIcukMmB-fCh0ewfD6binGo6dXVe9")
 
 
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-
+# Load reference dataset
 reader = csv.reader(open('CS50wordcount.csv', 'r',encoding="ISO-8859-1"))
 worddata=dict(reader)
 
@@ -53,33 +55,26 @@ def after_request(response):
     return response
 
 
-# Custom filter
-app.jinja_env.filters["usd"] = usd
+
 
 # Configure session to use filesystem (instead of signed cookies)
-#app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-#dbs=os.environ['dbu']
-
+#Initialize database connection
 datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
 db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 
-# Configure CS50 Library to use SQLite database
-#db=psycopg2.connect(dbs, sslmode='require')
 
-# Make sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
+
 
 
 @app.route("/")
 @login_required
 def index():
-    
+    # Check if we've logged into Spotify yet
     user = session.get("user_id")
     try:
         session['toke']
@@ -91,18 +86,23 @@ def index():
 @app.route("/scrape",methods=["GET", "POST"])
 @login_required
 def scrape():
+    # Load scraping page
     if request.method=="GET":
         return render_template("connect.html")
     if request.method=="POST":
         try:
+            # Get stuff from the webpage
             lim=int(request.form.get("songno"))
             if lim>25:
                 return render_template("warning.html",warning="Max 25!")
             timespan = request.form.get("timespan")
             user = session.get("user_id")
+            # Connect to Spotify and get our access token
             sp = spotipy.Spotify(auth=session['toke'])
             response = sp.current_user_top_tracks(limit=lim,time_range=timespan)
+            # So that the request doesn't timeout, send it to another worker
             job=q.enqueue(get_freq,args=(response,genius,worddata,user))
+            # Show user the songs whose lyrics we just scraped
             songlist=[]
             for item in response['items']:
                 name=item['name']
@@ -114,6 +114,7 @@ def scrape():
 @app.route("/whatis",methods=["GET"])
 @login_required
 def whatis():
+    # Load explainer page
     if request.method=="GET":
         return render_template("whatisthis.html")
     
@@ -168,6 +169,7 @@ def logout():
 @app.route("/connect", methods=["GET", "POST"])
 @login_required
 def connect():
+    # Authenticate with Spotify API
     if request.method == "GET":
         return(render_template("connect.html"))
     if request.method == "POST":
@@ -183,6 +185,7 @@ def register():
         return(render_template("register.html"))
 
     else:
+        # Probably unnecessary connection 
         datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
         db=datab.cursor()
         if request.form.get("username") and request.form.get("password"):
@@ -200,8 +203,7 @@ def register():
                 db.execute("INSERT INTO users (id,username, hash) VALUES (%s,%s, %s)", (newid,username, phash))
                 datab.commit()
                 return redirect("/login")
-                #except:
-                 #   return apology("Something else is fucked!")
+                
                 
             else:
                 return apology("Passwords must match!")
@@ -210,6 +212,7 @@ def register():
 
 @app.route("/callback")
 def callback():
+    # Method needed to finish authentication
     code = request.args.get('code')
 
     auth_token_url = f"{API_BASE}/api/token"
@@ -233,6 +236,7 @@ def viewdatal():
     user=session.get("user_id")
     datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
     db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    # Ratio tuples - word/fequency pairs
     ratiot=[]
     int(session.get("user_id"))
     db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
@@ -240,6 +244,7 @@ def viewdatal():
     datab.commit()
     
     if rows:
+        # Rows are presorted so let's see what the first 10 elements are
         rows=rows[:10]
         for i in rows:
             ratiot.append((i["word"],round(i["freq"],3)))
@@ -259,6 +264,7 @@ def viewdatam():
     rows = db.fetchall()
     datab.commit()
     if rows:
+        # Rows are presorted so let's see what the last 10 elements are (overrepresented ones)
         rows=rows[-10:]
         for i in rows:
             ratiot.append((i["word"],round(i["freq"],3)))
