@@ -1,10 +1,10 @@
-def get_freq(response):
+def get_freq(response,genius):
     wordbundle=[]
     ratios={}
     for item in response['items']:
         name=item['name']
         artist=item['artists'][0]['name']
-        lyrics=getlyrics(name,artist)
+        lyrics=getlyrics(name,artist,genius)
 
         lyrics=lyrics.split("\n")
         for i in lyrics:
