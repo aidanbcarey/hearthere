@@ -135,18 +135,20 @@ def scrape():
     if request.method=="GET":
         return render_template("connect.html")
     if request.method=="POST":
-        lim=request.form.get("songno")
-        user = session.get("user_id")
-        sp = spotipy.Spotify(auth=session['toke'])
-        response = sp.current_user_top_tracks(limit=lim)
-        job=q.enqueue(get_freq,args=(response,genius,worddata,user))
-        songlist=[]
-        for item in response['items']:
-            name=item['name']
-            artist=item['artists'][0]['name']
-            songlist.append((name,artist))
-        return render_template("songlist.html",songlist=songlist)
-
+        try:
+            lim=request.form.get("songno")
+            user = session.get("user_id")
+            sp = spotipy.Spotify(auth=session['toke'])
+            response = sp.current_user_top_tracks(limit=lim)
+            job=q.enqueue(get_freq,args=(response,genius,worddata,user))
+            songlist=[]
+            for item in response['items']:
+                name=item['name']
+                artist=item['artists'][0]['name']
+                songlist.append((name,artist))
+            return render_template("songlist.html",songlist=songlist)
+        except:
+            render_template("warning.html",warning="You need to log in to Spotify!")
     
     
 
@@ -240,73 +242,6 @@ def register():
         else:
             return apology("Fill everything out!")
 
-
-@app.route("/sell", methods=["GET", "POST"])
-@login_required
-def sell():
-    if request.method == "GET":
-        user = session.get("user_id")
-        stockhist = db.execute("SELECT symbol,quantity,buysell FROM transactions WHERE id=?", user)
-        transacted = {}
-        stocks = []
-
-        for i in stockhist:
-            # Goes through and counts how many stocks we have at our disposal
-            if i["symbol"] not in transacted:
-                if i["buysell"] == "buy":
-                    transacted[i["symbol"]] = i["quantity"]
-                else:
-                    transacted[i["symbol"]] = -i["quantity"]
-            else:
-                if i["buysell"] == "buy":
-                    transacted[i["symbol"]] += i["quantity"]
-                else:
-                    transacted[i["symbol"]] -= i["quantity"]
-        for i in transacted:
-
-            if transacted[i] > 0:
-                # Add stock to list of owned stocks
-                stocks.append(i.upper())
-
-        return(render_template("sell.html", stocks=stocks))
-    else:
-        shares = request.form.get("shares")
-        symbol = request.form.get("symbol").lower()
-        if not shares.isnumeric():
-            return apology("Not a valid sell request")
-        if float(shares).is_integer():
-            shares = int(shares)
-            user = session.get("user_id")
-            try:
-                # This catches people altering the HTML to try and sell a stock that isn't listed
-                price = lookup(symbol)['price']
-            except:
-                return(apology("Editing the HTML sure is fun!"))
-            cash = db.execute("SELECT cash FROM users WHERE id=?", user)[0]['cash']
-
-            stockhist = db.execute("SELECT quantity,buysell FROM transactions WHERE symbol=? AND id=?", symbol, user)
-
-            q = 0
-            # Count how many stocks we have left
-            if stockhist:
-                for i in stockhist:
-                    if i['buysell'] == "buy":
-                        q += i['quantity']
-
-                    else:
-                        q -= i['quantity']
-            # Check if we have enough to sell
-            if q >= shares:
-                db.execute("UPDATE users SET cash = ? WHERE id = ?", int(cash + shares * price), user)
-                db.execute("INSERT INTO transactions (id, price, time, symbol, quantity, buysell) VALUES(?, ?, ?, ?, ?, ?)",
-                           user, price, datetime.datetime.now(), symbol, shares, "sell")
-                return redirect("/")
-            else:
-                return apology("You don't own enough shares!")
-        else:
-            return apology("Not a valid sell request")
-
-    return apology("TODO")
 @app.route("/callback")
 def callback():
     code = request.args.get('code')
@@ -337,9 +272,14 @@ def viewdata():
     db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
     rows = db.fetchall()
     datab.commit()
-    for i in rows:
-        ratiot.append((i["word"],i["freq"]))
-    return render_template("quoted.html",lyrics=ratiot)
+    if rows:
+        for i in rows:
+            ratiot.append((i["word"],i["freq"]))
+        return render_template("quoted.html",lyrics=ratiot)
+    else:
+        render_template("warning.html",warning="Scrape some data from Spotify first!")
+
+
 
 
 def errorhandler(e):
