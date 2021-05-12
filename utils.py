@@ -4,6 +4,7 @@ import psycopg2.extras
 def get_freq(response,genius,worddata,user):
     datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
     db=datab.cursor()
+    datab.autocommit = True
     wordbundle=[]
     ratios={}
     for item in response['items']:
@@ -35,6 +36,7 @@ def get_freq(response,genius,worddata,user):
     if db.execute("SELECT * FROM userfreqs WHERE id=%s", (int(user),)):
         
         db.execute("DELETE FROM userfreqs WHERE id = %s",(int(user),))
+        datab.commit()
     for i in ratiot:
         db.execute("INSERT INTO userfreqs (id, word, freq) VALUES (%s, %s, %s)",(int(user),i[0],i[1]))
         datab.commit()
