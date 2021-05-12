@@ -32,7 +32,7 @@ def get_freq(response,genius,worddata,user):
     ratiot = [(k, v) for k, v in ratios.items()]
     ratiot.sort(key = lambda x: x[1])   
     ratiot=ratiot[1:10]
-    if db.execute("SELECT * FROM userfreqs WHERE "user""=(%s)", (int(user),)):
+    if db.execute("SELECT * FROM userfreqs WHERE "user"=(%s)", (int(user),)):
         
         db.execute("DELETE FROM userfreqs WHERE "user" = %s",(int(user),))
     for i in ratriot:
