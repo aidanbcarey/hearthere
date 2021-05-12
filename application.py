@@ -132,12 +132,10 @@ def history():
    
     user = session.get("user_id")
     sp = spotipy.Spotify(auth=session['toke'])
-    response = sp.current_user_top_tracks(limit="10")
+    response = sp.current_user_top_tracks(limit="15")
     job=q.enqueue(get_freq,args=(response,genius,worddata,user))
-    while not job.result:
-        pass
     
-    return render_template("quoted.html",lyrics=job.result)
+    return apology("Refresh in a minute or two!")
 
 
 @app.route("/login", methods=["GET", "POST"])
