@@ -216,12 +216,12 @@ def register():
                 phash = generate_password_hash(password)
                 #check = db.execute("SELECT username FROM users WHERE username = %s", (username,))
                 # A repeated username raises an exception
-                try:
-                    db.execute("INSERT INTO users (username, hash) VALUES (%s, %s)", (username, phash))
-                    datab.commit()
-                    return redirect("/login")
-                except:
-                    return apology("Something else is fucked!")
+                
+                db.execute("INSERT INTO users (username, hash) VALUES (%s, %s)", (username, phash))
+                datab.commit()
+                return redirect("/login")
+                #except:
+                 #   return apology("Something else is fucked!")
                 
             else:
                 return apology("Passwords must match!")
