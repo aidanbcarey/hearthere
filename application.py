@@ -312,11 +312,13 @@ def callback():
 @app.route("/deposit", methods=["GET", "POST"])
 @login_required
 def deposit():
+    user=session.get("user_id")
     datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
     db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
     ratiot=[]
-    
-    rows=db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(session.get("user_id")),))
+    int(session.get("user_id"))
+    rows=db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
+    datab.commit()
     for i in rows:
         ratiot.append((i["word"],i["freq"]))
     return render_template("quoted.html",lyrics=ratiot)
