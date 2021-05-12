@@ -6,11 +6,11 @@
 
 {% block main %}
 <table>
-  
+    {% for tuple in lyrics%}
    <tr>
-        <th> {{ lyrics }} </th>
-        
+        <th> {{ tuple[0] }} </th>
+        <th> {{ tuple[1] }}
    </tr>
-  
+   {% endfor %}
 </table>
 {% endblock %}
