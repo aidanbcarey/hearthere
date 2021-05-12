@@ -219,7 +219,7 @@ def register():
                 db.execute("SELECT MAX(id) FROM users ", (username, phash))
                 rows=db.fetchall()
                
-                newid=rows[0]+1
+                newid=rows[0][0]+1
                 db.execute("INSERT INTO users (id,username, hash) VALUES (%s,%s, %s)", (newid,username, phash))
                 datab.commit()
                 return redirect("/login")
