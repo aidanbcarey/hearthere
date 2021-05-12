@@ -19,6 +19,7 @@ import csv
 from rq import Queue
 from worker import conn
 from utils import word_count,get_freq,getlyrics
+import time
 q = Queue(connection=conn)
 
 # Configure application
@@ -130,9 +131,9 @@ def history():
     sp = spotipy.Spotify(auth=session['toke'])
     response = sp.current_user_top_tracks(limit="10")
     job=q.enqueue(get_freq,response)
-    print(job.get_id())
 
-    return render_template("quoted.html",lyrics=ratiot)
+    time.sleep(20)
+    return render_template("quoted.html",lyrics=job.result)
 
 
 @app.route("/login", methods=["GET", "POST"])
