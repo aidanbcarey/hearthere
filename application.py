@@ -98,10 +98,10 @@ def scrape():
             lim=int(request.form.get("songno"))
             if lim>25:
                 return render_template("warning.html",warning="Max 25!")
-
+            timespan = request.form.get("timespan")
             user = session.get("user_id")
             sp = spotipy.Spotify(auth=session['toke'])
-            response = sp.current_user_top_tracks(limit=lim)
+            response = sp.current_user_top_tracks(limit=lim,time_range=timespan+"_term")
             job=q.enqueue(get_freq,args=(response,genius,worddata,user))
             songlist=[]
             for item in response['items']:

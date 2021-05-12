@@ -9,6 +9,15 @@
         <div class="form-group">
             <input autocomplete="off" autofocus class="form-control" name="songno" placeholder="How many songs?" type="number">
         </div>
+        <select name="timespan">
+            <option disabled selected value="">What timespan?</option>
+            
+            <option value="{{ symbol }}">short</option>
+            <option value="{{ symbol }}">medium</option>
+            <option value="{{ symbol }}">long</option>
+            
+        </select>
+
 
         <button class="btn btn-primary" type="submit">Submit request!</button>
     </form>
