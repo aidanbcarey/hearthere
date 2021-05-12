@@ -1,5 +1,4 @@
 import os
-
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
@@ -15,6 +14,7 @@ import psycopg2
 import psycopg2.extras
 import pandas as pd
 import lyricsgenius 
+import csv
 # Configure application
 app = Flask(__name__)
 app.secret_key = "56203ed941434ffc8f9444fbb8d3ea0e"
@@ -34,6 +34,8 @@ genius=lyricsgenius.Genius("gFaD-lKo5gGKfo0W5pz-LYopBmkcLdurWAdaIcukMmB-fCh0ewfD
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+reader = csv.reader(open('CS50wordcount.csv', 'r'))
+worddata=dict(reader)
 
 # Ensure responses aren't cached
 @app.after_request
@@ -80,17 +82,29 @@ def buy():
     if request.method == "GET":
         print("here")
         sp = spotipy.Spotify(auth=session['toke'])
-        response = sp.current_user_top_tracks(limit="1")
-        name=response['items'][0]['name']
-        artist=response['items'][0]['artists'][0]['name']
-        lyrics=getlyrics(name,artist)
-        lyrics=getlyrics(name,artist)
-        lyrics=lyrics.split("\n")
-        for i in lyrics:
-            if i:
-                if i[0]=="[" and i[-1]=="]":
-                    lyrics.remove(i)
+        response = sp.current_user_top_tracks(limit="20")
+        wordbundle=[]
+        ratios={}
+        for item in response['items']
+            name=item['name']
+            artist=item['artists'][0]['name']
+            lyrics=getlyrics(name,artist)
+            lyrics=getlyrics(name,artist)
+            lyrics=lyrics.split("\n")
+            for i in lyrics:
+                if i:
+                    if i[0]=="[" and i[-1]=="]":
+                        lyrics.remove(i)
+            wordbundle.append(((getlyrics(name, artist)+' ')).upper())
+        collapsebundle=' '.join(wordbundle)
+        collapsebundle=collapsebundle.replace("'","").replace("]","").replace("[","").replace("!","").replace(".","").replace(",","").replace("(","").replace(")","").replace("{","").replace("}","").replace("?","").replace(":","").replace(";","").replace(r"VERSE |[1|2|3]|CHORUS|BRIDGE|OUTRO","").replace("[","").replace("]","").replace(r"INSTRUMENTAL|INTRO|GUITAR|SOLO","")
+        big=word_count(collapsebundle)
+        for key in big:
+            if worddata.has_key(key):
+                ratios[key]=big[key]/worddata[key]
+        lyrics=worddata["THE"]
 
+                
         return render_template("quoted.html",lyrics=lyrics)
     else:
         return apology("sowwy")
@@ -103,7 +117,18 @@ def getlyrics(song,artist):
     searchname=searchname.replace('(','').replace(')','')
     song = genius.search_song(searchname, artist);       
     return(song.lyrics)
+def word_count(str):
+    counts = dict()
+    words = str.split()
 
+    for word in words:
+        if word.isalpha():
+            if word in counts:
+                counts[word] += 1
+            else:
+                counts[word] = 1
+
+    return counts
 
 @app.route("/history")
 @login_required

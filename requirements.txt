@@ -9,4 +9,5 @@ gunicorn
 psycopg2
 pandas
 lyricsgenius
+csv
 
