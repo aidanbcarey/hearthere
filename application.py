@@ -126,7 +126,7 @@ def buy():
 @login_required
 def history():
     sp = spotipy.Spotify(auth=session['toke'])
-    response = sp.current_user_top_tracks(limit="10"))
+    response = sp.current_user_top_tracks(limit="10")
     ratiot=q.enqueue(get_freq,response)
     return render_template("quoted.html", lyrics=ratiot)
 
