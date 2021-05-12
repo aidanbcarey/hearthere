@@ -63,7 +63,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 #dbs=os.environ['dbu']
-#db = SQL(dbs)
+global db
 datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
 db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
@@ -133,7 +133,7 @@ def history():
     user = session.get("user_id")
     sp = spotipy.Spotify(auth=session['toke'])
     response = sp.current_user_top_tracks(limit="30")
-    job=q.enqueue(get_freq,args=(response,genius,worddata,datab,user))
+    job=q.enqueue(get_freq,args=(response,genius,worddata,user))
     while not job.result:
         pass
     
