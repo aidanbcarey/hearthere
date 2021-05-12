@@ -108,7 +108,7 @@ def buy():
             if key in worddata:
                 ratios[key]=float(big[key])/float(worddata[key])/total
         lyrics=ratios["THE"]
-        ratiot = [(k, v) for k, v in lyrics.items()]
+        ratiot = [(k, v) for k, v in ratios.items()]
         ratiot.sort(key = lambda x: x[1])   
         ratiot=ratiot[1:10]
         return render_template("quoted.html",lyrics=ratiot)
