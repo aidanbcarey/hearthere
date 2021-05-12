@@ -35,7 +35,7 @@ genius=lyricsgenius.Genius("gFaD-lKo5gGKfo0W5pz-LYopBmkcLdurWAdaIcukMmB-fCh0ewfD
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-reader = csv.reader(open('CS50wordcount.csv', 'r'))
+reader = csv.reader(open('CS50wordcount.csv', 'r',encoding="ISO-8859-1"))
 worddata=dict(reader)
 
 # Ensure responses aren't cached
