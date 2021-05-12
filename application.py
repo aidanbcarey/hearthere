@@ -255,7 +255,7 @@ def viewdatal():
 @app.route("/viewdata", methods=["GET", "POST"])
 @login_required
 def viewdata():
-    if request.method="GET":
+    if request.method=="GET":
         render_template("selectdata.html")
     if request.method == "POST":
         wordno=request.form.get("wordno")
