@@ -34,7 +34,7 @@ def get_freq(response,genius,worddata,user):
     ratiot=ratiot[1:10]
     if db.execute("SELECT * FROM userfreqs WHERE "user""=(%s)", (int(user),)):
         
-        db.execute("DELETE FROM userfreqs WHERE "user"" = %s",(int(user),))
+        db.execute("DELETE FROM userfreqs WHERE "user" = %s",(int(user),))
     for i in ratriot:
         db.execute("INSERT INTO userfreqs ("user", word, freq) VALUES (%s, %s, %s)",(int(user),i[0],i[1]))
     return(ratiot)
