@@ -321,9 +321,9 @@ def callback():
 
     return redirect("/")
 
-@app.route("/deposit", methods=["GET", "POST"])
+@app.route("/viewdata", methods=["GET", "POST"])
 @login_required
-def deposit():
+def viewdata():
     user=session.get("user_id")
     datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
     db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
