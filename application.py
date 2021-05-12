@@ -111,7 +111,11 @@ def scrape():
             return render_template("songlist.html",songlist=songlist)
         except:
             return render_template("warning.html",warning="You need to log in to Spotify!")
-    
+@app.route("/scrape",methods=["GET", "POST"])
+@login_required
+def whatis():
+    if request.method=="GET":
+        return render_template("whatisthis.html")
     
 
 @app.route("/login", methods=["GET", "POST"])
