@@ -313,7 +313,7 @@ def callback():
 @login_required
 def deposit():
     ratiot=[]
-    rows=db.execute("SELECT * FROM userfreqs WHERE id=%s",int(session.get("user_id")))
+    rows=db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(session.get("user_id")),))
     for i in rows:
         ratiot.append((i["word"],i["freq"]))
     return render_template("quoted.html",lyrics=ratiot)
