@@ -102,7 +102,7 @@ def buy():
         big=word_count(collapsebundle)
         total=0
         for key in big:
-            total+=d[key]
+            total+=big[key]
         for key in big:
             if key in worddata:
                 ratios[key]=float(big[key])/float(worddata[key]/total)
