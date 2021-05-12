@@ -6,10 +6,14 @@
 
 {% block main %}
 <table class="table">
+    <tr>
+        <th> Most underused words </th>
+        <th> Fraction rel. to corpus </th>
+   </tr>
     {% for tuple in lyrics%}
    <tr>
         <th> {{ tuple[0] }} </th>
-        <th> {{ tuple[1] }}
+        <th> {{ tuple[1] }} </th>
    </tr>
    {% endfor %}
 </table>
