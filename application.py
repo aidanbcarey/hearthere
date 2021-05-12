@@ -221,7 +221,7 @@ def register():
                     datab.commit()
                     return redirect("/login")
                 except:
-                    return apology("Username taken!")
+                    return apology("Something else is fucked!")
                 
             else:
                 return apology("Passwords must match!")
