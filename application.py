@@ -85,7 +85,7 @@ def buy():
         response = sp.current_user_top_tracks(limit="20")
         wordbundle=[]
         ratios={}
-        for item in response['items']
+        for item in response['items']:
             name=item['name']
             artist=item['artists'][0]['name']
             lyrics=getlyrics(name,artist)
