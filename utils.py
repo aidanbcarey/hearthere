@@ -32,11 +32,11 @@ def get_freq(response,genius,worddata,user):
     ratiot = [(k, v) for k, v in ratios.items()]
     ratiot.sort(key = lambda x: x[1])   
     ratiot=ratiot[1:10]
-    if db.execute("SELECT * FROM userfreqs WHERE user=(%s)", (user,)):
+    if db.execute("SELECT * FROM userfreqs WHERE user=(%s)", (int(user),)):
         
-        db.execute("DELETE FROM userfreqs WHERE user = %s",(user,))
+        db.execute("DELETE FROM userfreqs WHERE user = %s",(int(user),))
     for i in ratriot:
-        db.execute("INSERT INTO userfreqs (user, word, freq) VALUES (%s, %s, %s)",(user,i[0],i[1]))
+        db.execute("INSERT INTO userfreqs (user, word, freq) VALUES (%s, %s, %s)",(int(user),i[0],i[1]))
     return(ratiot)
 
 def getlyrics(song,artist,genius):
