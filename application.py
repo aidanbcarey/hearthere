@@ -250,7 +250,7 @@ def viewdata():
         datab.commit()
         if rows:
             # Rows are presorted so let's see what the last 10 elements are (overrepresented ones)
-            if moreorless=="more":
+            if ml=="more":
                 rows=rows[-1*wordno:]
             else:
                 rows=rows[:wordno]
