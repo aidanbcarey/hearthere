@@ -206,6 +206,8 @@ def register():
         return(render_template("register.html"))
 
     else:
+        datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
+        db=datab.cursor()
         if request.form.get("username") and request.form.get("password"):
             username = request.form.get("username")
             password = request.form.get("password")
@@ -215,7 +217,7 @@ def register():
                 #check = db.execute("SELECT username FROM users WHERE username = %s", (username,))
                 # A repeated username raises an exception
                 try:
-                    db.execute("INSERT INTO users (username, hash) VALUES(%s, %s)", (username, phash))
+                    db.execute("INSERT INTO users (username, hash) VALUES (%s, %s)", (username, phash))
                     datab.commit()
                     return redirect("/login")
                 except:
