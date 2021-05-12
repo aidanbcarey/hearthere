@@ -262,6 +262,7 @@ def viewdatam():
     int(session.get("user_id"))
     db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
     rows = db.fetchall()
+    # Better safe than sorry. The sheer number of SQL errors I got...
     datab.commit()
     if rows:
         # Rows are presorted so let's see what the last 10 elements are (overrepresented ones)
