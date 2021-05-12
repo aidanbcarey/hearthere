@@ -311,7 +311,7 @@ def deposit():
     ratiot={}
     sp = spotipy.Spotify(auth=session['toke'])
     response = sp.current_user_top_tracks(limit="10")
-    ratiot=get_freq(response,genius)
+    ratiot=get_freq(response,genius,worddata)
     return render_template("quoted.html",lyrics=ratiot)
 
 

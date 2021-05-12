@@ -1,4 +1,4 @@
-def get_freq(response,genius):
+def get_freq(response,genius,worddata):
     wordbundle=[]
     ratios={}
     for item in response['items']:
