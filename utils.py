@@ -26,7 +26,8 @@ def get_freq(response):
         ratiot = [(k, v) for k, v in ratios.items()]
         ratiot.sort(key = lambda x: x[1])   
         ratiot=ratiot[1:10]
-    return ratiot
+    return(ratiot)
+
 def getlyrics(song,artist):
     if " - " in song:
         searchname = song.split(" - ", 1)[0] 
@@ -35,6 +36,7 @@ def getlyrics(song,artist):
     searchname=searchname.replace('(','').replace(')','')
     song = genius.search_song(searchname, artist);       
     return(song.lyrics)
+
 def word_count(str):
     counts = dict()
     words = str.split()
