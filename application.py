@@ -128,7 +128,7 @@ def history():
     sp = spotipy.Spotify(auth=session['toke'])
     response = sp.current_user_top_tracks(limit="10")
     q.enqueue(get_freq,response)
-    return render_template("apology.html", "Wait just a second!")
+    return apology("Wait just a second!")
 
 
 @app.route("/login", methods=["GET", "POST"])
