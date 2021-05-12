@@ -100,9 +100,12 @@ def buy():
         collapsebundle=' '.join(wordbundle)
         collapsebundle=collapsebundle.replace("'","").replace("]","").replace("[","").replace("!","").replace(".","").replace(",","").replace("(","").replace(")","").replace("{","").replace("}","").replace("?","").replace(":","").replace(";","").replace(r"VERSE |[1|2|3]|CHORUS|BRIDGE|OUTRO","").replace("[","").replace("]","").replace(r"INSTRUMENTAL|INTRO|GUITAR|SOLO","")
         big=word_count(collapsebundle)
+        total=0
+        for key in big:
+            total+=d[key]
         for key in big:
             if key in worddata:
-                ratios[key]=big[key]/worddata[key]
+                ratios[key]=float(big[key])/float(worddata[key]/total)
         lyrics=worddata["THE"]
 
                 
