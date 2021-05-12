@@ -26,7 +26,7 @@ def get_freq(response):
     ratiot = [(k, v) for k, v in ratios.items()]
     ratiot.sort(key = lambda x: x[1])   
     ratiot=ratiot[1:10]
-    return(ratiot)
+    return 
 
 def getlyrics(song,artist,genius):
     if " - " in song:
