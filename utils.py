@@ -35,7 +35,10 @@ def getlyrics(song,artist,genius):
         searchname=song
     searchname=searchname.replace('(','').replace(')','')
     song = genius.search_song(searchname, artist);       
-    return(song.lyrics)
+    if song:
+        return(song.lyrics)
+    else:
+        return
 
 def word_count(str):
     counts = dict()
