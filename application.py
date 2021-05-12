@@ -107,7 +107,7 @@ def buy():
         for key in big:
             if key in worddata:
                 ratios[key]=float(big[key])/float(worddata[key])/total
-        lyrics=worddata["THE"]
+        lyrics=ratios["THE"]
 
                 
         return render_template("quoted.html",lyrics=lyrics)
