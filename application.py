@@ -216,9 +216,10 @@ def register():
                 phash = generate_password_hash(password)
                 #check = db.execute("SELECT username FROM users WHERE username = %s", (username,))
                 # A repeated username raises an exception
-                db.execute("SELECT id FROM users ", (username, phash))
+                db.execute("SELECT MAX(id) FROM users ", (username, phash))
                 rows=db.fetchall
-                newid=rows[-1]+1
+                for row in rows:
+                    newid=row+1
                 db.execute("INSERT INTO users (id,username, hash) VALUES (%s,%s, %s)", (newid,username, phash))
                 datab.commit()
                 return redirect("/login")
