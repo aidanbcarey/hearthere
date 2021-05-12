@@ -212,10 +212,8 @@ def register():
             confirmation = request.form.get("confirmation")
             if confirmation == password:
                 phash = generate_password_hash(password)
-                check = db.execute("SELECT username FROM users WHERE username = %s", (username,))
+                #check = db.execute("SELECT username FROM users WHERE username = %s", (username,))
                 # A repeated username raises an exception
-                if db.fetchall:
-                    return apology("Username taken!")
                 try:
                     db.execute("INSERT INTO users (username, hash) VALUES(%s, %s)", (username, phash))
                     datab.commit()
