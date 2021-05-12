@@ -101,7 +101,7 @@ def scrape():
             timespan = request.form.get("timespan")
             user = session.get("user_id")
             sp = spotipy.Spotify(auth=session['toke'])
-            response = sp.current_user_top_tracks(limit=lim,time_range=timespan+"_term")
+            response = sp.current_user_top_tracks(limit=lim,time_range=timespan)
             job=q.enqueue(get_freq,args=(response,genius,worddata,user))
             songlist=[]
             for item in response['items']:
