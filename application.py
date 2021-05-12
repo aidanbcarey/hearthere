@@ -83,7 +83,7 @@ def buy():
     if request.method == "GET":
         print("here")
         sp = spotipy.Spotify(auth=session['toke'])
-        response = sp.current_user_top_tracks(limit="20")
+        response = sp.current_user_top_tracks(limit="10")
         wordbundle=[]
         ratios={}
         for item in response['items']:
