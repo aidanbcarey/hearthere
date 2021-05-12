@@ -90,22 +90,22 @@ def buy():
             name=item['name']
             artist=item['artists'][0]['name']
             lyrics=getlyrics(name,artist)
-            lyrics=getlyrics(name,artist)
+
             lyrics=lyrics.split("\n")
             for i in lyrics:
                 if i:
                     if i[0]=="[" and i[-1]=="]":
                         lyrics.remove(i)
-            wordbundle.append(((getlyrics(name, artist)+' ')).upper())
+            wordbundle.append(lyrics.upper())
         collapsebundle=' '.join(wordbundle)
         collapsebundle=collapsebundle.replace("'","").replace("]","").replace("[","").replace("!","").replace(".","").replace(",","").replace("(","").replace(")","").replace("{","").replace("}","").replace("?","").replace(":","").replace(";","").replace(r"VERSE |[1|2|3]|CHORUS|BRIDGE|OUTRO","").replace("[","").replace("]","").replace(r"INSTRUMENTAL|INTRO|GUITAR|SOLO","")
         big=word_count(collapsebundle)
         total=0
         for key in big:
-            total+=big[key]
+            total+=int(big[key])
         for key in big:
             if key in worddata:
-                ratios[key]=float(big[key])/float(worddata[key]/total)
+                ratios[key]=float(big[key])/float(worddata[key])/total
         lyrics=worddata["THE"]
 
                 
