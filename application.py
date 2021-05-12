@@ -134,7 +134,7 @@ def buy():
 def scrape():
     if request.method=="GET":
         return render_template("connect.html")
-    if request.method=="PUT":
+    if request.method=="POST":
         lim=request.form.get("songno")
         user = session.get("user_id")
         sp = spotipy.Spotify(auth=session['toke'])
