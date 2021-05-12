@@ -17,7 +17,7 @@ def get_freq(response,genius,worddata,user):
             if i:
                 if i[0]=="[" and i[-1]=="]":
                     lyrics.remove(i)
-        lyrics=' '.join(lyrics)
+        lyrics=' '.join(lyrics) 
         wordbundle.append(lyrics.upper())
     collapsebundle=' '.join(wordbundle)
     collapsebundle=collapsebundle.replace("'","").replace("]","").replace("[","").replace("!","").replace(".","").replace(",","").replace("(","").replace(")","").replace("{","").replace("}","").replace("?","").replace(":","").replace(";","").replace(r"VERSE |[1|2|3]|CHORUS|BRIDGE|OUTRO","").replace("[","").replace("]","").replace(r"INSTRUMENTAL|INTRO|GUITAR|SOLO","")
