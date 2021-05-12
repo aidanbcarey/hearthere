@@ -88,47 +88,6 @@ def index():
         return(render_template("index.html"))
 
 
-
-@app.route("/buy", methods=["GET", "POST"])
-@login_required
-def buy():
-    if request.method == "GET":
-        print("here")
-        sp = spotipy.Spotify(auth=session['toke'])
-        response = sp.current_user_top_tracks(limit="10")
-        wordbundle=[]
-        ratios={}
-        for item in response['items']:
-            name=item['name']
-            artist=item['artists'][0]['name']
-            lyrics=getlyrics(name,artist,genius)
-
-            lyrics=lyrics.split("\n")
-            for i in lyrics:
-                if i:
-                    if i[0]=="[" and i[-1]=="]":
-                        lyrics.remove(i)
-            lyrics=' '.join(lyrics)
-            wordbundle.append(lyrics.upper())
-        collapsebundle=' '.join(wordbundle)
-        collapsebundle=collapsebundle.replace("'","").replace("]","").replace("[","").replace("!","").replace(".","").replace(",","").replace("(","").replace(")","").replace("{","").replace("}","").replace("?","").replace(":","").replace(";","").replace(r"VERSE |[1|2|3]|CHORUS|BRIDGE|OUTRO","").replace("[","").replace("]","").replace(r"INSTRUMENTAL|INTRO|GUITAR|SOLO","")
-        big=word_count(collapsebundle)
-        total=0
-        for key in big:
-            total+=int(big[key])
-        for key in big:
-            if key in worddata:
-                ratios[key]=float(big[key])/float(worddata[key])/total
-        lyrics=ratios["THE"]
-        ratiot = [(k, v) for k, v in ratios.items()]
-        ratiot.sort(key = lambda x: x[1])   
-        ratiot=ratiot[1:10]
-        return render_template("quoted.html",lyrics=ratiot)
-    else:
-        return apology("sowwy")
-
-
-
 @app.route("/scrape",methods=["GET", "POST"])
 @login_required
 def scrape():
@@ -261,9 +220,29 @@ def callback():
 
     return redirect("/")
 
-@app.route("/viewdata", methods=["GET", "POST"])
+@app.route("/viewdatal", methods=["GET", "POST"])
 @login_required
-def viewdata():
+def viewdatal():
+    user=session.get("user_id")
+    datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
+    db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    ratiot=[]
+    int(session.get("user_id"))
+    db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
+    rows = db.fetchall()
+    datab.commit()
+    
+    if rows:
+        rows=rows[10:]
+        for i in rows:
+            ratiot.append((i["word"],i["freq"]))
+        return render_template("songlist.html",lyrics=ratiot,listkind="Most overused words!")
+    else:
+        render_template("warning.html",warning="Scrape some data from Spotify first!")
+
+@app.route("/viewdatam", methods=["GET", "POST"])
+@login_required
+def viewdatam():
     user=session.get("user_id")
     datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
     db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -274,12 +253,11 @@ def viewdata():
     datab.commit()
     if rows:
         for i in rows:
+            rows=rows[-10:]
             ratiot.append((i["word"],i["freq"]))
-        return render_template("quoted.html",lyrics=ratiot)
+        return render_template("songlist.html",songlist=ratiot)
     else:
-        render_template("warning.html",warning="Scrape some data from Spotify first!")
-
-
+        render_template("warning.html",warning="Scrape some data from Spotify first!",listkind="Most underused words!")
 
 
 def errorhandler(e):
