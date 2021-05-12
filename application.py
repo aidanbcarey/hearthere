@@ -80,7 +80,7 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     user = session.get("user_id")
-    return(render_template("connect.html"))
+    return(render_template("index.html"))
 
 
 
