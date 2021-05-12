@@ -1,4 +1,5 @@
 import psycopg2
+import os
 def get_freq(response,genius,worddata,user):
     datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
     db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
