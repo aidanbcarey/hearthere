@@ -235,7 +235,7 @@ def callback():
 @login_required
 def viewdata():
     if request.method=="GET":
-        render_template("selectdata.html")
+        return(render_template("selectdata.html"))
     if request.method == "POST":
         wordno=request.form.get("wordno")
         ml=request.form.get("moreorless")
@@ -256,9 +256,9 @@ def viewdata():
                 rows=rows[:wordno]
             for i in rows:
                 ratiot.append((i["word"],round(i["freq"],3)))
-            return render_template("freqs.html",freqs=ratiot,whatare="Overrepresented words")
+            return render_template("freqs.html",freqs=ratiot,whatare="Your idiosyncratic lyrics!")
         else:
-            render_template("warning.html",warning="Scrape some data from Spotify first!")
+            return(render_template("warning.html",warning="Scrape some data from Spotify first!"))
 
 
 def errorhandler(e):
