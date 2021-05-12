@@ -218,7 +218,7 @@ def register():
                 # A repeated username raises an exception
                 db.execute("SELECT id FROM users ", (username, phash))
                 rows=db.fetchall
-                newid=rows[-1]["id"]+1
+                newid=rows[-1]+1
                 db.execute("INSERT INTO users (id,username, hash) VALUES (%s,%s, %s)", (newid,username, phash))
                 datab.commit()
                 return redirect("/login")
