@@ -131,8 +131,9 @@ def history():
     sp = spotipy.Spotify(auth=session['toke'])
     response = sp.current_user_top_tracks(limit="10")
     job=q.enqueue(get_freq,args=(response,genius,worddata,))
-
+    
     time.sleep(20)
+    ratiot=job.result
     return render_template("quoted.html",lyrics=job.result)
 
 
