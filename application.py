@@ -77,9 +77,14 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     user = session.get("user_id")
-    
+    if session["toke"]
+        sp = spotipy.Spotify(auth=session['toke'])
+        response = sp.current_user_top_tracks(limit="10")
+        freqs=q.enqueue(get_freq,response)
 
-    return(render_template("index.html",portfolio=session["toke"]))
+        return(render_template("index.html",portfolio=session["toke"]))
+    else:
+        return(apology("Login first!"))
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -125,10 +130,8 @@ def buy():
 @app.route("/history")
 @login_required
 def history():
-    sp = spotipy.Spotify(auth=session['toke'])
-    response = sp.current_user_top_tracks(limit="10")
-    q.enqueue(get_freq,response)
-    return apology("Wait just a second!")
+
+    return render_template("quoted.html",lyrics=freqs)
 
 
 @app.route("/login", methods=["GET", "POST"])
