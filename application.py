@@ -317,7 +317,8 @@ def deposit():
     db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
     ratiot=[]
     int(session.get("user_id"))
-    rows=db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
+    db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
+    rows = db.fetchall()
     datab.commit()
     for i in rows:
         ratiot.append((i["word"],i["freq"]))
