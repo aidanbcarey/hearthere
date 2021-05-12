@@ -237,7 +237,7 @@ def viewdata():
     if request.method=="GET":
         return(render_template("selectdata.html"))
     if request.method == "POST":
-        wordno=request.form.get("wordno")
+        wordno=int(request.form.get("wordno"))
         ml=request.form.get("moreorless")
         user=session.get("user_id")
         datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
@@ -251,7 +251,7 @@ def viewdata():
         if rows:
             # Rows are presorted so let's see what the last 10 elements are (overrepresented ones)
             if ml=="more":
-                rows=rows[-1*wordno:]
+                rows=rows[int(-1*wordno):]
             else:
                 rows=rows[:wordno]
             for i in rows:
