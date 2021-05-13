@@ -18,7 +18,7 @@ import lyricsgenius
 import csv
 from rq import Queue
 from worker import conn
-from utils import word_count,get_freq,getlyrics
+from utils import word_count, get_freq, getlyrics
 import time
 q = Queue(connection=conn)
 
@@ -26,25 +26,24 @@ q = Queue(connection=conn)
 app = Flask(__name__)
 # Configure variables we will be using throughout
 app.secret_key = "56203ed941434ffc8f9444fbb8d3ea0e"
-CLI_ID="92c6a3d2dd7d4efb89ad40c7a33f6e87"
+CLI_ID = "92c6a3d2dd7d4efb89ad40c7a33f6e87"
 API_BASE = 'https://accounts.spotify.com'
 SHOW_DIALOG = True
-CLI_SEC="56203ed941434ffc8f9444fbb8d3ea0e"
+CLI_SEC = "56203ed941434ffc8f9444fbb8d3ea0e"
 
 # Redirect URI for the Spotify API
 REDIRECT_URI = "https://hearthere.herokuapp.com/callback"
-
 SCOPE = 'playlist-modify-private,playlist-modify-public,user-top-read'
 # Configure Genius API
-genius=lyricsgenius.Genius("gFaD-lKo5gGKfo0W5pz-LYopBmkcLdurWAdaIcukMmB-fCh0ewfD6binGo6dXVe9")
-
+genius = lyricsgenius.Genius("gFaD-lKo5gGKfo0W5pz-LYopBmkcLdurWAdaIcukMmB-fCh0ewfD6binGo6dXVe9")
 
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 # Load reference dataset
-reader = csv.reader(open('CS50wordcount.csv', 'r',encoding="ISO-8859-1"))
-worddata=dict(reader)
+reader = csv.reader(open('CS50wordcount.csv', 'r', encoding="ISO-8859-1"))
+worddata = dict(reader)
+
 
 # Ensure responses aren't cached
 @app.after_request
@@ -55,20 +54,14 @@ def after_request(response):
     return response
 
 
-
-
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-#Initialize database connection
-datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
-db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-
-
-
+# Initialize database connection
+datab = psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
+db = datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 
 @app.route("/")
@@ -83,39 +76,41 @@ def index():
         return(render_template("index.html"))
 
 
-@app.route("/scrape",methods=["GET", "POST"])
+@app.route("/scrape", methods=["GET", "POST"])
 @login_required
 def scrape():
     # Load scraping page
-    if request.method=="GET":
+    if request.method == "GET":
         return render_template("connect.html")
-    if request.method=="POST":
+    if request.method == "POST":
         try:
             # Get stuff from the webpage
-            lim=int(request.form.get("songno"))
-            if lim>50:
-                return render_template("warning.html",warning="Max 50!")
+            lim = int(request.form.get("songno"))
+            if lim > 50:
+                return render_template("warning.html", warning="Max 50!")
             timespan = request.form.get("timespan")
             user = session.get("user_id")
             # Connect to Spotify and get our access token
             sp = spotipy.Spotify(auth=session['toke'])
-            response = sp.current_user_top_tracks(limit=lim,time_range=timespan)
+            response = sp.current_user_top_tracks(limit=lim, time_range=timespan)
             # So that the request doesn't timeout, send it to another worker
-            job=q.enqueue(get_freq,args=(response,genius,worddata,user))
+            job = q.enqueue(get_freq, args=(response, genius, worddata, user))
             # Show user the songs whose lyrics we just scraped
-            songlist=[]
+            songlist = []
             for item in response['items']:
-                name=item['name']
-                artist=item['artists'][0]['name']
-                songlist.append((name,artist))
-            return render_template("songlist.html",songlist=songlist)
+                name = item['name']
+                artist = item['artists'][0]['name']
+                songlist.append((name, artist))
+            return render_template("songlist.html", songlist=songlist)
         except:
-            return render_template("warning.html",warning="You need to log in to Spotify!")
-@app.route("/whatis",methods=["GET"])
+            return render_template("warning.html", warning="You need to log in to Spotify!")
+
+
+@app.route("/whatis", methods=["GET"])
 @login_required
 def whatis():
     # Load explainer page
-    if request.method=="GET":
+    if request.method == "GET":
         return render_template("whatisthis.html")
     
 
@@ -186,8 +181,8 @@ def register():
 
     else:
         # Probably unnecessary connection 
-        datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
-        db=datab.cursor()
+        datab = psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
+        db = datab.cursor()
         if request.form.get("username") and request.form.get("password"):
             username = request.form.get("username")
             password = request.form.get("password")
@@ -197,18 +192,18 @@ def register():
                 #check = db.execute("SELECT username FROM users WHERE username = %s", (username,))
                 # A repeated username raises an exception
                 db.execute("SELECT MAX(id) FROM users ", (username, phash))
-                rows=db.fetchall()
+                rows = db.fetchall()
                
-                newid=rows[0][0]+1
-                db.execute("INSERT INTO users (id,username, hash) VALUES (%s,%s, %s)", (newid,username, phash))
+                newid = rows[0][0]+1
+                db.execute("INSERT INTO users (id,username, hash) VALUES (%s,%s, %s)", (newid, username, phash))
                 datab.commit()
                 return redirect("/login")
-                
-                
+                    
             else:
                 return apology("Passwords must match!")
         else:
             return apology("Fill everything out!")
+
 
 @app.route("/callback")
 def callback():
@@ -217,12 +212,12 @@ def callback():
 
     auth_token_url = f"{API_BASE}/api/token"
     res = requests.post(auth_token_url, data={
-        "grant_type":"authorization_code",
-        "code":code,
-        "redirect_uri":REDIRECT_URI,
-        "client_id":CLI_ID,
-        "client_secret":CLI_SEC
-        })
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": REDIRECT_URI,
+        "client_id": CLI_ID,
+        "client_secret": CLI_SEC
+    })
 
     res_body = res.json()
  
@@ -234,31 +229,32 @@ def callback():
 @app.route("/viewdata", methods=["GET", "POST"])
 @login_required
 def viewdata():
-    if request.method=="GET":
+    if request.method == "GET":
         return(render_template("selectdata.html"))
     if request.method == "POST":
-        wordno=int(request.form.get("wordno"))
-        ml=request.form.get("moreorless")
-        user=session.get("user_id")
-        datab=psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
-        db=datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        ratiot=[]
+        wordno = int(request.form.get("wordno"))
+        # more common or less common?
+        ml = request.form.get("moreorless")
+        user = session.get("user_id")
+        datab = psycopg2.connect(os.environ["DATABASE_URL"], sslmode='require')
+        db = datab.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        ratiot = []
         int(session.get("user_id"))
-        db.execute("SELECT * FROM userfreqs WHERE id=%s",(int(user),))
+        db.execute("SELECT * FROM userfreqs WHERE id=%s", (int(user),))
         rows = db.fetchall()
         # Better safe than sorry. The sheer number of SQL errors I got...
         datab.commit()
         if rows:
             
-            if ml=="more":
-                rows=rows[int(-1*wordno):]
+            if ml == "more":
+                rows = rows[int(-1*wordno):]
             else:
-                rows=rows[:wordno]
+                rows = rows[:wordno]
             for i in rows:
-                ratiot.append((i["word"],round(i["freq"],3)))
-            return render_template("freqs.html",freqs=ratiot,whatare="Your idiosyncratic lyrics!")
+                ratiot.append((i["word"], round(i["freq"], 3)))
+            return render_template("freqs.html", freqs=ratiot, whatare="Your idiosyncratic lyrics!")
         else:
-            return(render_template("warning.html",warning="Scrape some data from Spotify first!"))
+            return(render_template("warning.html", warning="Scrape some data from Spotify first!"))
 
 
 def errorhandler(e):
