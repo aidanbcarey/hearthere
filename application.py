@@ -249,7 +249,7 @@ def viewdata():
         # Better safe than sorry. The sheer number of SQL errors I got...
         datab.commit()
         if rows:
-            # Rows are presorted so let's see what the last 10 elements are (overrepresented ones)
+            
             if ml=="more":
                 rows=rows[int(-1*wordno):]
             else:
